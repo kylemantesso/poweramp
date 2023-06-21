@@ -1,0 +1,88 @@
+import * as functions from "firebase-functions";
+// import * as nacl from 'tweetnacl';
+
+// Start writing functions
+// https://firebase.google.com/docs/functions/typescript
+
+const pulseConstant = 1000; // Pulse constant: 1000 impulses per kWh
+
+export const pulseCount = functions.https.onRequest((request, response) => {
+  functions.logger.info("request body", { body: request.body });
+
+  if(request.body.payload === undefined) {
+    response.send("No payload found");
+    return;
+  }
+
+  const decodedPayload = atob(request.body.payload);
+
+  functions.logger.info(`decodedPayload : ${decodedPayload}`);
+
+  // // Get the length of the signature (64 bytes)
+  // const signatureLength = 64;
+
+  // // Extract the signed data from the payload
+  // const signedData = decodedPayload.slice(0, -signatureLength);
+
+  // // Extract the signature from the payload
+  // const signature = decodedPayload.slice(-signatureLength);
+
+  // functions.logger.info(`Signed Data: ${signedData}`);
+  // functions.logger.info(`Signature: ${signature}`);
+
+  // Decode the pulseCount
+  const pulseCount =
+      (decodedPayload.charCodeAt(0) << 24) |
+      (decodedPayload.charCodeAt(1) << 16) |
+      (decodedPayload.charCodeAt(2) << 8) |
+      decodedPayload.charCodeAt(3);
+
+  functions.logger.info(`Decoded pulseCount: ${pulseCount}`);
+
+  // Decode the timeDifference
+  const timeDifference =
+      (decodedPayload.charCodeAt(4) << 24) |
+      (decodedPayload.charCodeAt(5) << 16) |
+      (decodedPayload.charCodeAt(6) << 8) |
+      decodedPayload.charCodeAt(7);
+
+  functions.logger.info(`Decoded timeDifference: ${timeDifference}`);
+
+  // Convert time difference from milliseconds to hours
+  const timeInHours = timeDifference / 3600000;
+
+  // Calculate power usage in kW
+  const powerUsage = (pulseCount / pulseConstant) / timeInHours;
+
+  console.log(`Power Usage: ${powerUsage.toFixed(6)} kW`);
+
+  // Verify the signature
+  // const publicKey = '950EDCE41E1E08FF7E941A95157D932BA555CA4D2136DAE9F06F0A2299DDF4E4'; // Replace with the actual public key
+  // const verified = verifySignature(signedData, signature, publicKey);
+  // if (verified) {
+  //   console.log('Signature verified');
+  // } else {
+  //   console.log('Invalid signature');
+  // }
+
+  response.send("Success");
+});
+
+// Verify the signature using the public key
+// function verifySignature(data: string, signature: string, publicKey: string): boolean {
+//   // Convert the signature and public key to Uint8Arrays
+//   const signatureBytes = Buffer.from(signature, 'hex');
+//   const publicKeyBytes = Buffer.from(publicKey, 'hex');
+//
+//   // Convert the data string to a Uint8Array
+//   const dataBytes = new TextEncoder().encode(data);
+//
+//   // Verify the signature
+//   const verified = nacl.sign.detached.verify(
+//       dataBytes,
+//       signatureBytes,
+//       publicKeyBytes
+//   );
+//
+//   return verified;
+// }

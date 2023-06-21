@@ -1,0 +1,15 @@
+{
+  "name": "helix-grid",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "npm run build -- --watch | firebase emulators:start --only functions"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "^2.8.8"
+  }
+}
