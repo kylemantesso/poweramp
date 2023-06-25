@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Container,
   Stack,
   Typography,
@@ -23,72 +24,56 @@ export const Hero: FC = props => {
           flexDirection: 'column',
         }}
       >
-        <Stack spacing={1}>
+        <Stack spacing={1} alignItems="center">
           <Typography align="center" variant="h1">
-            Connect, conserve, earn!
+            Connect, reduce, reward!
           </Typography>
-          <Typography align="center" variant="h5">
-              PowerAmp enables you to earn rewards for conserving energy ⚡️🌱💰
+          <Typography width="90%" align="center" variant="h5">
+              PowerAmp is a revolutionary, decentralised demand response platform built on Hedera! ⚡️🌱💰
           </Typography>
         </Stack>
 
-        {/*<Box*/}
-        {/*  sx={{*/}
-        {/*    display: 'flex',*/}
-        {/*    flexWrap: 'wrap',*/}
-        {/*    justifyContent: 'center',*/}
-        {/*    mx: -1,*/}
-        {/*    mt: 2,*/}
-        {/*    mb: 6,*/}
-        {/*    '& > a': {*/}
-        {/*      m: 1,*/}
-        {/*    },*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*  <Button*/}
-        {/*    component="a"*/}
-        {/*    size="large"*/}
-        {/*    variant="outlined"*/}
-        {/*    href="https://youtu.be/FsXELo_1lww&amp;mode=theatre"*/}
-        {/*    target="_blank"*/}
-        {/*  >*/}
-        {/*    Watch intro*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    component="a"*/}
-        {/*    href="https://cooldogs.hellohelix.app"*/}
-        {/*    size="large"*/}
-        {/*    variant="contained"*/}
-        {/*  >*/}
-        {/*    🐶 Demo checkout*/}
-        {/*  </Button>*/}
-        {/*</Box>*/}
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            mx: -1,
+            mt: 4,
+            mb: 6,
+            '& > a': {
+              m: 1,
+            },
+          }}
+        >
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/wFejlriuAJg" title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen></iframe>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            mx: -1,
+            mt: 2,
+            mb: 6,
+            '& > a': {
+              m: 1,
+            },
+          }}
+        >
+          <Button
+            component="a"
+            href="/login"
+            size="large"
+            variant="contained"
+          >
+            Join PowerAmp today!
+          </Button>
+        </Box>
       </Container>
-      {/*<Box*/}
-      {/*  sx={{*/}
-      {/*    maxWidth: 800,*/}
-      {/*    width: '100%',*/}
-      {/*    mx: 'auto',*/}
-      {/*    padding: {*/}
-      {/*      xs: 2,*/}
-      {/*      sm: 4,*/}
-      {/*      md: 4,*/}
-      {/*    },*/}
-      {/*  }}*/}
-      {/*>*/}
-      {/*  <Paper*/}
-      {/*    sx={{*/}
-      {/*      maxWidth: '100%',*/}
-      {/*      height: 'auto',*/}
-      {/*      padding: 0,*/}
-      {/*      margin: 0,*/}
-      {/*    }}*/}
-      {/*    elevation={24}*/}
-      {/*    component="img"*/}
-      {/*    alt="Checkout"*/}
-      {/*    src="checkout.gif"*/}
-      {/*  ></Paper>*/}
-      {/*</Box>*/}
     </Box>
   );
 };

@@ -108,8 +108,7 @@ export async function optInToEvent(
       )
       .freezeWithSigner(magicWallet as Signer);
 
-    const res = await tx.executeWithSigner(magicWallet as Signer);
-
+    await tx.executeWithSigner(magicWallet as Signer);
   } catch (error) {
     debugger;
     console.error("Error joining event:", error);

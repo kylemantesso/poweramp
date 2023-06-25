@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Paper, Typography } from '@mui/material';
+import { Box, Container, Grid, Paper, Typography } from '@mui/material';
 import type { FC } from 'react';
 
 export const Onramp: FC = props => {
@@ -32,30 +32,20 @@ export const Onramp: FC = props => {
                   },
                 }}
               >
-                <img alt="Helix NFT wallet" src="product-3.png" />
+                <img alt="Helix NFT wallet" src="1.PNG" />
               </Paper>
             </Box>
           </Grid>
           <Grid item md={6} xs={12} order={{ xs: 1, md: 2 }}>
-            <Typography variant="h3">👛 No wallet? No worries!</Typography>
+            <Typography variant="h3">📈 Real-time energy usage</Typography>
             <Typography
               color="textSecondary"
               sx={{ my: 3 }}
               variant="subtitle1"
             >
-              Your customers can purchase NFTs directly into their secure Helix
-              Wallet by simply using their email address.
+              Our innovative IOT solution that connects to your smart meter delivers real time energy usage data
             </Typography>
-            <Box>
-              <Button
-                component="a"
-                href="/wallet"
-                size="large"
-                variant="outlined"
-              >
-                Open your Helix Wallet
-              </Button>
-            </Box>
+
           </Grid>
         </Grid>
       </Container>
