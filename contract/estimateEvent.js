@@ -1,6 +1,4 @@
-const {
-  ContractExecuteTransaction
-} = require("@hashgraph/sdk");
+const { ContractExecuteTransaction, PublicKey } = require("@hashgraph/sdk");
 const { getClient, abi } = require("./util");
 const { Interface } = require("@ethersproject/abi");
 
@@ -8,17 +6,16 @@ const client = getClient();
 
 // Set the smart contract and contract function information
 const contractId = "0.0.14938651";
-const contractFunction = "createEvent";
+const contractFunction = "assignEstimatedEnergyUsage";
 
 // Example function to create an event
-async function createEvent(startTimestamp, endTimestamp) {
+async function estimateEvent(eventId, users, estimates) {
   try {
     // generate function call with function name and parameters
-    const functionCallAsUint8Array = encodeFunctionParameters(contractFunction, [
-      startTimestamp,
-      endTimestamp,
-      "Test Event",
-    ]);
+    const functionCallAsUint8Array = encodeFunctionParameters(
+      contractFunction,
+      [eventId, users, estimates]
+    );
 
     // execute the transaction calling the set_message contract function
     const transaction = await new ContractExecuteTransaction()
@@ -35,15 +32,11 @@ async function createEvent(startTimestamp, endTimestamp) {
   }
 }
 
-// Example usage
-const startTimestamp = Math.floor(
-  new Date("2023-06-28T08:00:00Z").getTime() / 1000
-);
-const endTimestamp = Math.floor(
-  new Date("2023-06-28T09:00:00Z").getTime() / 1000
-);
+const eventId = 1;
+const users = ["0x2e6b0ecc8e1755e8ebeefbdf318012e23fbf9870"];
+const estimates = [1];
 
-createEvent(startTimestamp, endTimestamp);
+const addresses = estimateEvent(eventId, users, estimates);
 
 function encodeFunctionParameters(functionName, parameterArray) {
   // build the call parameters using ethers.js

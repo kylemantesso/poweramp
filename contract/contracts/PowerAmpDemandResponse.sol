@@ -30,9 +30,9 @@ contract PowerAmpDemandResponse {
         _;
     }
 
-    constructor(uint256 _initialTokenSupply) {
+    constructor(address _tokenAddress) {
         admin = msg.sender;
-        powerAmpToken = new PowerAmpToken(_initialTokenSupply);
+        powerAmpToken = PowerAmpToken(_tokenAddress);
     }
 
     function createEvent(uint256 _startTimestamp, uint256 _endTimestamp, string memory _name) external onlyAdmin {

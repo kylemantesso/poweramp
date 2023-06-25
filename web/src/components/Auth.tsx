@@ -3,8 +3,13 @@ import { Navigate, useLocation } from "react-router-dom";
 import { Loader } from "./Loader/Loader";
 
 export function RequireAuth({ children }: { children: JSX.Element }) {
-  let { isLoggedIn } = useAppContext();
+  let { isLoggedIn, isLoading } = useAppContext();
   let location = useLocation();
+
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (!isLoggedIn) {
     // Redirect them to the /login page, but save the current location they were

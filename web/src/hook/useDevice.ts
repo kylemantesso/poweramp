@@ -25,7 +25,6 @@ export function useDevice(accountId: string) {
           topic: res[deviceId].topic,
           account: res[deviceId].account,
         });
-        console.log(res);
       });
     }
   }, [accountId]);

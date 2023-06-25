@@ -11,6 +11,11 @@ import {
   AccountCreateTransaction,
   Hbar,
   TransferTransaction,
+  TokenAssociateTransaction,
+  ContractExecuteTransaction,
+  ContractFunctionParameters,
+  ContractCallQuery,
+  TokenMintTransaction,
 } from "@hashgraph/sdk";
 import { initializeApp } from "firebase-admin/app";
 import { getDatabase } from "firebase-admin/database";
@@ -32,6 +37,8 @@ const ACCOUNT_ID = "0.0.13335931";
 const INTERVAL = 20000; // 20 seconds
 const PULSE_CONSTANT = 1000; // 1000 pulses per kWh
 
+const POWER_AMP_TOKEN_ID_TESTNET = "0.0.14935581";
+
 initializeApp({
   projectId: "helix-grid",
   // databaseURL: 'http://127.0.0.1:9000/?ns=helix-grid'
@@ -41,7 +48,6 @@ initializeApp({
 
 const privateKeyBytes = Buffer.from(PRIVATE_KEY_HEX.slice(2), "hex");
 const privateKey = PrivateKey.fromBytes(privateKeyBytes);
-const PUBLIC_KEY = privateKey.publicKey;
 
 const getClient = (accountId: string, privateKey: string) => {
   return Client.forTestnet().setOperator(accountId, privateKey);
@@ -50,6 +56,37 @@ const getClient = (accountId: string, privateKey: string) => {
   // client.setOperator(ACCOUNT_ID, privateKey);
   // return client;
 };
+
+// Load up some PowerAmp tokens for testing
+export const transfer = functions.https.onRequest(async (request, response) => {
+  corsHandler(request, response, async () => {
+    if (request.body.accountId === undefined) {
+      response.send("No account id found");
+      return;
+    }
+
+    // Load test account with hbar for hackathon
+    const client = getClient(ACCOUNT_ID, privateKey.toStringDer());
+
+    const myAccountId = AccountId.fromString(ACCOUNT_ID);
+    const newAccountId = AccountId.fromString(request.body.accountId);
+
+    //Create the transaction
+    const transferTx = new TransferTransaction()
+      .addTokenTransfer(POWER_AMP_TOKEN_ID_TESTNET, myAccountId, -10)
+      .addTokenTransfer(POWER_AMP_TOKEN_ID_TESTNET, newAccountId, 10);
+
+    //Sign with the sender account private key
+    const res = await transferTx.execute(client);
+
+    const receipt = await res.getReceipt(client);
+
+    console.log("receipt", receipt);
+    console.log("receipt status", receipt.status);
+
+    response.send("Success");
+  });
+});
 
 export const login = functions.https.onRequest(async (request, response) => {
   corsHandler(request, response, async () => {
@@ -66,6 +103,7 @@ export const login = functions.https.onRequest(async (request, response) => {
     // If user already exists, do nothing
     const snap = await db.ref(`account/${cleanedAccountId}`).get();
     if (snap.exists()) {
+      response.send("exists");
       return;
     }
 
@@ -77,8 +115,8 @@ export const login = functions.https.onRequest(async (request, response) => {
 
     //Create the transaction
     const transferTx = new TransferTransaction()
-      .addHbarTransfer(myAccountId, Hbar.fromTinybars(-100)) //Sending account, amount in tinybar
-      .addHbarTransfer(newAccountId, Hbar.fromTinybars(100)); //Receiving account, amount in tinybar
+      .addHbarTransfer(myAccountId, Hbar.fromTinybars(-10)) //Sending account, amount in tinybar
+      .addHbarTransfer(newAccountId, Hbar.fromTinybars(10)); //Receiving account, amount in tinybar
 
     //Sign with the sender account private key
     const res = await transferTx.execute(client);
@@ -93,7 +131,7 @@ export const login = functions.https.onRequest(async (request, response) => {
       deviceId: "6081F910A956EC6D",
     });
 
-    return;
+    response.send("created");
   });
 });
 

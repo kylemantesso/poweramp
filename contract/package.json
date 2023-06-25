@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "solcjs --abi --bin -o ./build ./contracts/*.sol",
+    "deploy": "node deploy.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

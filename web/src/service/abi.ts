@@ -1,7 +1,7 @@
 export const abi = [
   {
     inputs: [
-      { internalType: "uint256", name: "_initialTokenSupply", type: "uint256" },
+      { internalType: "address", name: "_tokenAddress", type: "address" },
     ],
     stateMutability: "nonpayable",
     type: "constructor",

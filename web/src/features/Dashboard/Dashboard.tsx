@@ -14,6 +14,7 @@ import { Usage } from "../Usage/Usage";
 import React from "react";
 import { Events } from "../Events/Events";
 import {Account} from "../Account/Account";
+import {Devices} from "../Devices/Devices";
 
 export function Dashboard() {
   const { publicAddress } = useAppContext();
@@ -39,6 +40,7 @@ export function Dashboard() {
                 <Route index element={<Navigate to="usage" />} />
                 <Route path="usage" element={<Usage />} />
                 <Route path="events" element={<Events />} />
+                <Route path="devices" element={<Devices />} />
                 <Route path="account" element={<Account />} />
               </Routes>
             </Box>
@@ -67,6 +69,11 @@ const NavigationTabs: React.FC = () => {
         label="Events"
         value="/dashboard/events"
         to="/dashboard/events"
+      />
+      <LinkTab
+        label="Devices"
+        value="/dashboard/devices"
+        to="/dashboard/devices"
       />
       <LinkTab
         label="Account"

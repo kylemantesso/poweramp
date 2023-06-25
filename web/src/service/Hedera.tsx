@@ -132,8 +132,6 @@ export async function getTopicMessages(
     };
   });
 
-  console.log(formatted);
-
   return formatted;
 }
 

@@ -10,7 +10,7 @@ import { MagicWallet } from "../MagicWallet";
 
 export const abiInterface = new Interface(abi);
 
-const TESTNET_CONTRACT_ADDRESS = "0.0.14821969";
+const TESTNET_CONTRACT_ADDRESS = "0.0.14938651";
 
 const FUNCTIONS = {
   getEvents: "getEvents",
@@ -19,9 +19,18 @@ const FUNCTIONS = {
 };
 
 export interface DemandResponseEvent {
+  id: number;
   name: string;
   startTimestamp: number;
   endTimestamp: number;
+}
+
+export interface OptInDemandResponseEvent {
+  eventId: number;
+  optedInTimestamp: number;
+  actualEnergyUsage: number;
+  estimatedEnergyUsage: number;
+  energySaving: number;
 }
 
 export async function getEvents(
@@ -39,7 +48,8 @@ export async function getEvents(
       FUNCTIONS.getEvents,
       query.bytes
     );
-    const events = results[0].map((rawEvent: any) => ({
+    const events = results[0].map((rawEvent: any, ix: number) => ({
+      id: ix + 1,
       name: rawEvent.name,
       startTimestamp: parseInt(rawEvent.startTimestamp.toString()),
       endTimestamp: parseInt(rawEvent.endTimestamp.toString()),
@@ -54,7 +64,7 @@ export async function getEvents(
 
 export async function getOptInEvents(
   magicWallet: MagicWallet
-): Promise<DemandResponseEvent[]> {
+): Promise<OptInDemandResponseEvent[]> {
   try {
     // Build the query
     const query = await new ContractCallQuery()
@@ -68,15 +78,15 @@ export async function getOptInEvents(
       query.bytes
     );
 
-    console.log(results);
-
     const events = results[0].map((rawEvent: any) => ({
-      eventId: rawEvent.name,
-      startTimestamp: parseInt(rawEvent.startTimestamp.toString()),
-      endTimestamp: parseInt(rawEvent.endTimestamp.toString()),
+      eventId: parseInt(rawEvent.eventId.toString()),
+      optedInTimestamp: parseInt(rawEvent.optedInTimestamp.toString()),
+      actualEnergyUsage: parseInt(rawEvent.actualEnergyUsage.toString()),
+      estimatedEnergyUsage: parseInt(rawEvent.estimatedEnergyUsage.toString()),
+      energySaving: parseInt(rawEvent.energySaving.toString()),
     }));
 
-    return events;
+    return events as OptInDemandResponseEvent[];
   } catch (error) {
     console.error("Error retrieving events:", error);
     return Promise.reject("Could not get events");
@@ -88,7 +98,6 @@ export async function optInToEvent(
   magicWallet: MagicWallet
 ): Promise<void> {
   try {
-    debugger;
     // Build the query
     const tx = await new ContractExecuteTransaction()
       .setContractId(TESTNET_CONTRACT_ADDRESS)
@@ -101,7 +110,6 @@ export async function optInToEvent(
 
     const res = await tx.executeWithSigner(magicWallet as Signer);
 
-    console.log(res);
   } catch (error) {
     debugger;
     console.error("Error joining event:", error);
